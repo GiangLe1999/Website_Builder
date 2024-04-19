@@ -47,6 +47,11 @@ const FileUpload = ({ apiEndpoint, onChange, value }: Props) => {
   }
   return (
     <div className="w-full bg-muted/30">
+      {/* Chọn file upload xong, uploadthing api sẽ được gọi và ảnh được đẩy lên cloud
+      Sau khi file được đẩy lên cloud xong, res[0].url là public URL của file
+      Set public URL này làm value của input. Khi input có value thì UI phía trên sẽ được render
+      thay vì UploadDropzone
+      */}
       <UploadDropzone
         endpoint={apiEndpoint}
         onClientUploadComplete={(res) => {

@@ -2,20 +2,17 @@ import AgencyDetails from "@/components/forms/agency-details";
 import { getAuthUserDetails, verifyAndAcceptInvitation } from "@/lib/queries";
 import { currentUser } from "@clerk/nextjs";
 import { Plan } from "@prisma/client";
-import { verify } from "crypto";
-import { NextPage } from "next";
 import { redirect } from "next/navigation";
+import React from "react";
 
-interface Props {
-  searchParams: {
-    plan: Plan;
-    state: string;
-    code: string;
-  };
-}
-
-const Page: NextPage<Props> = async ({ searchParams }) => {
+const Page = async ({
+  searchParams,
+}: {
+  searchParams: { plan: Plan; state: string; code: string };
+}) => {
   const agencyId = await verifyAndAcceptInvitation();
+
+  //get the users details
   const user = await getAuthUserDetails();
   if (agencyId) {
     if (user?.role === "SUBACCOUNT_GUEST" || user?.role === "SUBACCOUNT_USER") {
@@ -27,15 +24,13 @@ const Page: NextPage<Props> = async ({ searchParams }) => {
         );
       }
       if (searchParams.state) {
-        const statePath = searchParams.state.split("__")[0];
-        const stateAgencyId = searchParams.state.split("__")[3];
+        const statePath = searchParams.state.split("___")[0];
+        const stateAgencyId = searchParams.state.split("___")[1];
         if (!stateAgencyId) return <div>Not authorized</div>;
         return redirect(
           `/agency/${stateAgencyId}/${statePath}?code=${searchParams.code}`
         );
-      } else {
-        return redirect(`/agency/${agencyId}`);
-      }
+      } else return redirect(`/agency/${agencyId}`);
     } else {
       return <div>Not authorized</div>;
     }
@@ -44,7 +39,7 @@ const Page: NextPage<Props> = async ({ searchParams }) => {
   return (
     <div className="flex justify-center items-center mt-4">
       <div className="max-w-[850px] border-[1px] p-4 rounded-xl">
-        <h1 className="text-4xl">Create An Agency</h1>
+        <h1 className="text-2xl mb-5 font-bold uppercase">Create An Agency</h1>
         <AgencyDetails
           data={{ companyEmail: authUser?.emailAddresses[0].emailAddress }}
         />
