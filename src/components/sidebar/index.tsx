@@ -59,6 +59,14 @@ const Sidebar: FC<Props> = async ({
         subAccounts={subaccounts}
         user={user}
       />
+      <MenuOptions
+        details={details}
+        id={id}
+        sidebarLogo={sideBarLogo}
+        sidebarOpt={sidebarOpt}
+        subAccounts={subaccounts}
+        user={user}
+      />
     </>
   );
 };
